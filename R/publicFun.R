@@ -1,16 +1,18 @@
 
 #' Train a BayesToPs model for regression.
-#' 
+#'
 #' @param x A DataFrame
 #' @param y A vector with the labels
 #' @return A trained BayesToPs model
-#' @export 
+#' @export
 btops <- function(x,y, initialPrior,
                   normalise = TRUE, features2norm = names(x), normaliseY = TRUE,
                   decay = .1, blrResVariance = 1,
-                  modelSelection = "Bayes factors", propagatePosterior = TRUE, weightsMethod = "mean",
+                  modelSelection = "Bayes factors", propagatePosterior = TRUE,
+                  weightsMethod = "mean",
                   metric_createTree = "rmse", metric_finalWeights = "rmse",
-                  maxDepthTree = 10, maxSizeSlices = 500, maxSplitValueTested = 50, minSizeLeaf = 1, minNbObsV2 = 1,
+                  maxDepthTree = 10, maxSizeSlices = 500,
+                  maxSplitValueTested = 50, minSizeLeaf = 1, minNbObsV2 = 1,
                   printProgress = TRUE,
                   seed = NA
                   ){
@@ -39,7 +41,8 @@ btops <- function(x,y, initialPrior,
 		stop("Invalid argument decay")
 	}
 
-	if(!(is.numeric(maxDepthTree) & (maxDepthTree > 0) & (maxDepthTree%%1 == 0) )){
+	if(!(is.numeric(maxDepthTree) & (maxDepthTree > 0) &
+	     (maxDepthTree%%1 == 0) )){
 		stop("Invalid argument maxDepthTree")
 	}
 
@@ -59,11 +62,13 @@ btops <- function(x,y, initialPrior,
 		stop("Invalid argument metric_finalWeights")
 	}
 
-	if(!(is.numeric(maxSizeSlices) & (maxSizeSlices > 0) & (maxSizeSlices%%1 == 0) )){
+	if(!(is.numeric(maxSizeSlices) & (maxSizeSlices > 0) &
+	     (maxSizeSlices%%1 == 0) )){
 		stop("Invalid argument maxSizeSlices")
 	}
 
-	if(!(is.numeric(maxSplitValueTested) & (maxSplitValueTested > 0) & (maxSplitValueTested%%1 == 0) )){
+	if(!(is.numeric(maxSplitValueTested) & (maxSplitValueTested > 0) &
+	     (maxSplitValueTested%%1 == 0) )){
 		stop("Invalid argument maxSplitValueTested")
 	}
 

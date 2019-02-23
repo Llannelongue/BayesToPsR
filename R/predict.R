@@ -18,9 +18,10 @@ computeOverallPredictor <- function(nodePreds, nodeVars, weights, bayesian){
 btopsPredict <- function(ToP, newdata){
 
 	# tic("Prediction")
-	newdata2 <- base::cbind("Intercept" = 1, 
-	                        btopsNormaliseNewdata(normalizer=ToP$normalizer, 
-	                                              newdata=newdata, returnDf=FALSE))
+	newdata2 <- base::cbind("Intercept" = 1,
+	                        btopsNormaliseNewdata(normalizer=ToP$normalizer,
+	                                              newdata=newdata,
+	                                              returnDf=FALSE))
 
 	n <- nrow(newdata2)
 
@@ -28,12 +29,12 @@ btopsPredict <- function(ToP, newdata){
 	predictedVariances <- as.list(rep(NA, size = n))
 	predIdx <- 1 # tracker
 
-	# if there is a single node in the tree 
+	# if there is a single node in the tree
 	if(ToP$nbNodes == 1){
 
 		for(idx in 1:n){
-			pred <- predictNodeModel(Xnew = matrix(newdata2[idx,], nrow=1), 
-			                         posterior = ToP$Nodes[[1]]$model$posterior, 
+			pred <- predictNodeModel(Xnew = matrix(newdata2[idx,], nrow=1),
+			                         posterior = ToP$Nodes[[1]]$model$posterior,
 			                         blrResVariance = ToP$blrResVariance,
 			                         bayesian = ToP$bayesian,
 			                         computeFullDistribution = TRUE)
@@ -42,18 +43,22 @@ btopsPredict <- function(ToP, newdata){
 			predictedVariances[[idx]] <- pred$predDistribution$Sigma_p
 		}
 
-	} else{ # ie if there is more than one node in the tree 
+	} else{ # ie if there is more than one node in the tree
 		obsPaths <- getPathMulti(X = newdata2, Y=NA, ToP = ToP)
-		
-		# We go through the observations stored in obs_paths 
+
+		# We go through the observations stored in obs_paths
 		for(pathInd in obsPaths){
-			# we first get the leaf of this observation 
+			# we first get the leaf of this observation
 			leaf <- pathInd$path[[length(pathInd$path)]]
 
-			overallPred <- computeOverallPredictor(nodePreds = unlist(pathInd$predictions), 
-			                                       nodeVars = pathInd$variancePredictions, 
-			                                       weights = ToP$Nodes[[leaf]]$weights,
-			                                       bayesian = ToP$bayesian)
+			overallPred <- computeOverallPredictor(nodePreds =
+			                                         unlist(pathInd$predictions),
+			                                       nodeVars =
+			                                         pathInd$variancePredictions,
+			                                       weights =
+			                                         ToP$Nodes[[leaf]]$weights,
+			                                       bayesian =
+			                                         oP$bayesian)
 
 			predictedValues[[predIdx]] <- overallPred$predictedValue
 			predictedVariances[[predIdx]] <- overallPred$predictedVariance
@@ -64,8 +69,11 @@ btopsPredict <- function(ToP, newdata){
 	# toc()
 
 	if(ToP$normalizer$doNormalise){
-		rawPredictedValues <- unlist(predictedValues) * ToP$normalizer$normalizerSdY + ToP$normalizer$normalizerMeanY
-		rawPredictedVariances <- unlist(predictedVariances) * ToP$normalizer$normalizerSdY^2
+		rawPredictedValues <- unlist(predictedValues) *
+		  ToP$normalizer$normalizerSdY +
+		  ToP$normalizer$normalizerMeanY
+		rawPredictedVariances <- unlist(predictedVariances) *
+		  ToP$normalizer$normalizerSdY^2
 	} else{
 		rawPredictedValues <- unlist(predictedValues)
 		rawPredictedVariances <- unlist(predictedVariances)

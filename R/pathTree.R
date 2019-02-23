@@ -1,8 +1,9 @@
 # Tested and works
 
 getNextNode <- function(node, obs){
-  
-  # Depending of the (split value, split Feature) of this node, the next node is it's right or left child
+
+  # Depending of the (split value, split Feature) of this node,
+  # the next node is it's right or left child
 
   if(obs[node$splitFeature] <= node$splitValue){
     nextNodeIdx <- node$leftChild
@@ -18,31 +19,32 @@ getPathSingle <- function(ToP,
                           obs,
                           obsTarget,
                           doPredict){
-  
+
   # Initialisation
   leafNotReached <- TRUE
-  
+
   nodeIdx <- 1 # We start at the root
-  
-  path <- base::as.list(base::rep(NA, ToP$depthTree)) # list of indexes of nodes on the paths.
+
+  path <- base::as.list(base::rep(NA, ToP$depthTree))
+  # list of indexes of nodes on the paths.
   path[[1]] <- nodeIdx # we add the root
   pathIdx <- 2 # we use this index to know where to insert the next node
-  
+
   predictions <- base::as.list(base::rep(NA, ToP$depthTree))
   variancePredictions <- base::as.list(base::rep(NA, ToP$depthTree))
   predIdx <- 1
-  
+
   # print(node_idx)
-  
+
   # We keep going through the tree until a leaf is reached.
   while(leafNotReached){
     # Get the current node from the tree
     node <- ToP$Nodes[[nodeIdx]]
-    
-    # if doPredict==TRUE, make the prediction on this node 
+
+    # if doPredict==TRUE, make the prediction on this node
     if(doPredict){ # ie if we want to get the predictions on the path
       pred <- predictNodeModel(Xnew = t(obs),
-                               posterior = node$model$posterior, 
+                               posterior = node$model$posterior,
                                blrResVariance = ToP$blrResVariance,
                                bayesian = ToP$bayesian,
                                computeFullDistribution = TRUE)
@@ -52,8 +54,8 @@ getPathSingle <- function(ToP,
       # And update the prediction tracker
       predIdx <- predIdx + 1
     }
-  
-    # Test if this node is a leaf 
+
+    # Test if this node is a leaf
     if(node$isLeaf == 1){ # ie it's a leaf
       leafNotReached <- FALSE
 
@@ -64,16 +66,17 @@ getPathSingle <- function(ToP,
       path[pathIdx] <- nextNodeIdx
       # update the pathIdx tracker
       pathIdx <- pathIdx + 1
-      # as well as the nodeIdx 
+      # as well as the nodeIdx
       nodeIdx <- nextNodeIdx
-      
+
     }
   }
-  
-  
+
+
   return(base::list(path = path[!base::is.na(path)],
                     predictions = predictions[!base::is.na(predictions)],
-                    variancePredictions = variancePredictions[!base::is.na(variancePredictions)],
+                    variancePredictions = variancePredictions[
+                      !base::is.na(variancePredictions)],
                     target = obsTarget))
 }
 
@@ -98,9 +101,9 @@ getPathMulti <- function(X, Y, ToP){
                                                    obsTarget = Y[idx],
                                                    doPredict = TRUE)
     }
-    
+
     obsPathsTracker <- obsPathsTracker + 1
   }
-             
+
   return(obsPaths)
 }

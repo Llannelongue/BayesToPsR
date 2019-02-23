@@ -93,7 +93,8 @@ createTree <- function(XtrainFull, YtrainFull,
   # Creates the tree structure ---------------------
 
   ToP <- base::list(Nodes = base::as.list(base::rep(NA,
-                                                    2^(maxDepthTree + 1) - 1)),
+                                                    2 ^ (maxDepthTree +
+                                                           1) - 1)),
                     blrResVariance = blrResVariance,
                     terminalLeaves = c(), # terminal leaves' indexes
                     nbNodes = 0, # Number of nodes
@@ -117,7 +118,7 @@ createTree <- function(XtrainFull, YtrainFull,
                               maxSizeSlices = maxSizeSlices)
 
   ToP$Nodes[[1]] <- initialiseNode(trainIdx = trainIdx,
-                                   val1Idx=val1Idx,
+                                   val1Idx = val1Idx,
                                    model = modelRoot,
                                    depthParent = 0,
                                    sizeVal2 = base::length(val2Idx),
@@ -129,21 +130,21 @@ createTree <- function(XtrainFull, YtrainFull,
 
   # Build the tree further until there is no leaf in temporaryLeavesIdx --------
 
-  while(base::length(temporaryLeavesIdx) > 0){
+  while (base::length(temporaryLeavesIdx) > 0){
 
     # We take as a parent node the first element of temporaryLeavesIdx
     parentIdx <- temporaryLeavesIdx[1]
     parentDepth <- ToP$Nodes[[parentIdx]]$depth
 
     # We check if this node is already at the maximum depth allowed ------------
-    if(parentDepth >= maxDepthTree){
+    if (parentDepth >= maxDepthTree){
       # We remove the node from the temporaryLeavesIdx, and keep Nodes as it is.
       temporaryLeavesIdx <- base::setdiff(temporaryLeavesIdx, parentIdx)
 
       # And add this node to the list of terminal leaves
       ToP$terminalLeaves <- c(ToP$terminalLeaves, parentIdx)
 
-      if(printProgress){
+      if (printProgress){
         base::cat("\t---> node",parentIdx,": maxDepth reached \n\n")
       }
 
@@ -167,7 +168,7 @@ createTree <- function(XtrainFull, YtrainFull,
                              decay = decay)
 
       # We decide to split or not this node
-      if(nextGen$isSplitBetter == 0){ # ie if the root is NOT divided
+      if (nextGen$isSplitBetter == 0){ # ie if the root is NOT divided
         # We remove the node from temporaryLeavesIdx, and keep Nodes as it is.
         temporaryLeavesIdx <- base::setdiff(temporaryLeavesIdx, parentIdx)
 
@@ -179,7 +180,7 @@ createTree <- function(XtrainFull, YtrainFull,
                     ": not divided (performance or minSizeLeaf) \n\n")
         }
 
-      } else{ # if the node is divided
+      } else { # if the node is divided
         # We update Nodes and temporaryLeavesIdx with the children.
         ToPwithKids <- addChildren(ToP = ToP,
                                     nextGen = nextGen,
