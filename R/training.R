@@ -23,7 +23,7 @@ btopsTrain <- function(XtrainFull, YtrainFull,
                        metric_finalWeights){
 
 
-	## Algorithm
+  n <- base::nrow(XtrainFull)
 
 	base::rownames(XtrainFull) <- 1:n
 

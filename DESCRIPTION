@@ -1,9 +1,25 @@
 Package: BayesTopsR
-Title: What the Package Does (one line, title case)
+Type: Package
+Title: Implement BayesToPs algorithm
 Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-Depends: R (>= 3.5.1)
-License: What license is it under?
+Authors@R: person("Loïc", "Lannelongue", email = "l.lannelongue@gmail.com",
+    role = c("aut", "cre"))
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Imports: 
+    base,
+    MASS,
+    matrixStats,
+    Metrics,
+    mvtnorm,
+    stats,
+    tictoc
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown
+RoxygenNote: 6.1.1
+VignetteBuilder: knitr
