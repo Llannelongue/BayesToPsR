@@ -1,11 +1,48 @@
 
 #' Train a BayesToPs model for regression.
 #'
-#' @param x A DataFrame
-#' @param y A vector with the labels
+#' @param x A DataFrame with n rows and p columns
+#' @param y A vector of length n with the labels
+#' @param initialPrior A list with an attribute mean (vector of length p)
+#' and an attribute variance (square matrix of dimension p).
+#' It's the initial prior to be used on the root of the tree.
+#' @param normalise a boolean, if TRUE (default) then the data is normalised
+#' beforehand.
+#' @param features2norm vector containing the columns to normalise.
+#' Ignored if normalise=FALSE.
+#' @param normaliseY a boolean, if TRUE (default), then the response
+#' variable is also normalised. Ignored if normalise=FALSE.
+#' @param decay a float between 0 and 1 fixing the decay parameter.
+#' @param blrResVariance a float representing the residual variance in the
+#' Bayesian Linear Model fitted at each node.
+#' @param modelSelection one of "Bayes factors" or "Validation",
+#' describe the model selection method used to divide the nodes.
+#' @param propagatePosterior a boolean, if TRUE (default),
+#' the posterior distribution is propagated to the child nodes,
+#' otherwise initialPrior is used as prior.
+#' @param weightsMethod one of "lm", "validation", "bayes",
+#' "leaf only" or "mean" (default). Decided how to find the final weight of
+#' the predictor in each leaf.
+#' @param metric_createTree one of "auc", "rmse" (default), "r2" or "mae".
+#' The metric used to evaluate the performance of the models
+#' when building the tree.
+#' @param metric_finalWeights one of "auc", "rmse" (default), "r2" or "mae".
+#' The metric used to evaluate the performance of the models
+#' when fitting the final weights.
+#' @param maxDepthTree int limiting the depth of the tree (default to 10).
+#' @param maxSizeSlices int limiting the maximum number of observations to
+#' consider when computing the joint marginal likelihood at a node
+#' (default to 500).
+#' @param maxSplitValueTested int limiting the number of split value
+#' to test at each node (default to 50).
+#' @param minSizeLeaf int fixing the minimum number of observations
+#' from the training set in a leaf (default to 1).
+#' @param minNbObsV2 int, only if weightsMethod="validation".
+#' @param printProgress boolean, if TRUE (default), the progress of the
+#' tree will be displayed.
 #' @return A trained BayesToPs model
 #' @export
-btops <- function(x,y, initialPrior,
+bayesTops <- function(x,y, initialPrior,
                   normalise = TRUE, features2norm = names(x), normaliseY = TRUE,
                   decay = .1, blrResVariance = 1,
                   modelSelection = "Bayes factors", propagatePosterior = TRUE,
@@ -13,8 +50,7 @@ btops <- function(x,y, initialPrior,
                   metric_createTree = "rmse", metric_finalWeights = "rmse",
                   maxDepthTree = 10, maxSizeSlices = 500,
                   maxSplitValueTested = 50, minSizeLeaf = 1, minNbObsV2 = 1,
-                  printProgress = TRUE,
-                  seed = NA
+                  printProgress = TRUE
                   ){
 	### Test validity of arguments
 
