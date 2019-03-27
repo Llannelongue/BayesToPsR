@@ -28,12 +28,16 @@ btopsTrain <- function(XtrainFull, YtrainFull,
 	base::rownames(XtrainFull) <- 1:n
 
   # Set aside the validation sets ---------------------
-  trainValIdx <- splitTrainVal12(idx = 1:n, fracVal1 = fracVal1,
-                                 fracVal2 = fracVal2)
+
+	newFracVal <- findV1V2(modelSelection = modelSelection,
+	                       weightsMethod = weightsMethod,
+	                       fracVal1=fracVal1, fracVal2=fracVal2)
+
+  trainValIdx <- splitTrainVal12(idx = 1:n, fracVal1 = newFracVal$fracVal1bis,
+                                 fracVal2 = newFracVal$fracVal2bis)
   trainIdx <- trainValIdx$trainIdx
   val1Idx <- trainValIdx$val1Idx
   val2Idx <- trainValIdx$val2Idx
-
 	# Normalise data --------
 
 	normalisedData <- btopsNormalise(normalise = normalise,

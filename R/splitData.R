@@ -1,5 +1,22 @@
 # Tested and works
 
+findV1V2 <- function(modelSelection, weightsMethod, fracVal1, fracVal2){
+  if(modelSelection == "Bayes factors"){
+    fracVal1bis <- 0
+  } else{
+    fracVal1bis <- fracVal1
+  }
+
+  if(weightsMethod %in% c("mean", "bayes", "leaf only")){
+    fracVal2bis <- 0
+  } else{
+    fracVal2bis <- fracVal2
+  }
+
+  return(list(fracVal1bis = fracVal1bis,
+              fracVal2bis = fracVal2bis))
+}
+
 splitTrainVal12 <- function(idx, fracVal1, fracVal2){
 
     n <- base::length(idx)
@@ -29,7 +46,7 @@ splitTrainVal12 <- function(idx, fracVal1, fracVal2){
         val2Idx <- c()
     }
 
-    return(base::list(trainIdx = base::as.numeric(trainIdx), 
+    return(base::list(trainIdx = base::as.numeric(trainIdx),
                       val1Idx = base::as.numeric(val1Idx),
                       val2Idx = base::as.numeric(val2Idx)))
 }

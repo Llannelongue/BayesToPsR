@@ -1,3 +1,4 @@
+#### TRAINING ####
 
 #' Train a BayesToPs model for regression.
 #'
@@ -40,6 +41,7 @@
 #' @param minNbObsV2 int, only if weightsMethod="validation".
 #' @param printProgress boolean, if TRUE (default), the progress of the
 #' tree will be displayed.
+#'
 #' @return A trained BayesToPs model
 #' @export
 bayesTops <- function(x,y, initialPrior,
@@ -49,7 +51,8 @@ bayesTops <- function(x,y, initialPrior,
                   weightsMethod = "mean",
                   metric_createTree = "rmse", metric_finalWeights = "rmse",
                   maxDepthTree = 10, maxSizeSlices = 500,
-                  maxSplitValueTested = 50, minSizeLeaf = 1, minNbObsV2 = 1,
+                  fracVal1 = .2, fracVal2 = .2,
+                  maxSplitValueTested = 50, minSizeLeaf = 2, minNbObsV2 = 1,
                   printProgress = TRUE
                   ){
 	### Test validity of arguments
@@ -75,6 +78,14 @@ bayesTops <- function(x,y, initialPrior,
 
 	if(!(is.numeric(decay) & (decay > 0) & (decay <= 1))){
 		stop("Invalid argument decay")
+	}
+
+	if(!(is.numeric(fracVal1) & (fracVal1 > 0) & (fracVal1 <= 1))){
+	  stop("Invalid argument fracVal1")
+	}
+
+	if(!(is.numeric(fracVal2) & (fracVal2 > 0) & (fracVal2 <= 1))){
+	  stop("Invalid argument fracVal2")
 	}
 
 	if(!(is.numeric(maxDepthTree) & (maxDepthTree > 0) &
@@ -132,13 +143,11 @@ bayesTops <- function(x,y, initialPrior,
 		stop("Invalid argument printProgress")
 	}
 
-	set.seed()
-
 	ToP <- btopsTrain(XtrainFull = x, YtrainFull = y,
 	                  normalise = normalise,
 	                  features2norm = features2norm,
 	                  normaliseY = normaliseY,
-	                  fracVal1 = , fracVal2 = ,
+	                  fracVal1 = fracVal1, fracVal2 = fracVal2,
 	                  maxDepthTree = maxDepthTree,
 	                  blrResVariance = blrResVariance,
 	                  bayesian = TRUE,
@@ -159,5 +168,15 @@ bayesTops <- function(x,y, initialPrior,
 }
 
 
+#### PREDICT ####
 
+#' Predict labels using a trained BayesToPs model.
+#'
+#' @param trained.model Trained model
+#' @param mewdata New dataset with the same features
+#' @return list with raw and normalised predicted labels
+#' @export
+bayesTops.predict <- function(trained.model, newdata){
+  return(btopsPredict(ToP = trained.model, newdata = newdata))
+}
 

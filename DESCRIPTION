@@ -4,8 +4,8 @@ Title: Implement BayesToPs algorithm
 Version: 0.0.0.9000
 Authors@R: person("Loïc", "Lannelongue", email = "l.lannelongue@gmail.com",
     role = c("aut", "cre"))
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: This is a Machine Learning model for regression 
+    combining a Bayesian framework with a Tree of Predictors structure.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
