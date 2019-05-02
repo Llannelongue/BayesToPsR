@@ -15,7 +15,7 @@ computeOverallPredictor <- function(nodePreds, nodeVars, weights, bayesian){
 	            predictedVariance = unname(predictedVariance)))
 }
 
-btopsPredict <- function(ToP, newdata){
+btopsPredict <- function(ToP, newdata, confidence.level=.95){
 
 	# tic("Prediction")
 	newdata2 <- base::cbind("Intercept" = 1,
@@ -79,8 +79,14 @@ btopsPredict <- function(ToP, newdata){
 		rawPredictedVariances <- unlist(predictedVariances)
 	}
 
+	q <- stats::qnorm(confidence.level)
+
+	PI <- data.frame("lwr" = rawPredictedValues - q * base::sqrt(rawPredictedVariances),
+	                 "upr" = rawPredictedValues + q * base::sqrt(rawPredictedVariances))
+
 	return(list(predictedValues = unlist(predictedValues),
 	            rawPredictedValues = rawPredictedValues,
 	            predictedVariances = unlist(predictedVariances),
-	            rawPredictedVariances = rawPredictedVariances))
+	            rawPredictedVariances = rawPredictedVariances,
+	            predictiveInterval = PI))
 }
