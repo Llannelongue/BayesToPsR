@@ -76,7 +76,7 @@ bayesTops <- function(x,y, initialPrior,
 		stop("Invalid argument fracVal2")
 	}
 
-	if(!(is.numeric(decay) & (decay > 0) & (decay <= 1))){
+	if(!(is.numeric(decay) & (decay >= 1))){
 		stop("Invalid argument decay")
 	}
 
