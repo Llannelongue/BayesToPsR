@@ -176,7 +176,8 @@ bayesTops <- function(x,y, initialPrior,
 #' @param mewdata New dataset with the same features
 #' @return list with raw and normalised predicted labels
 #' @export
-bayesTops.predict <- function(trained.model, newdata){
-  return(btopsPredict(ToP = trained.model, newdata = newdata))
+bayesTops.predict <- function(trained.model, newdata, confidence.level=.95){
+  return(btopsPredict(ToP = trained.model, newdata = newdata,
+                      confidence.level=confidence.level))
 }
 

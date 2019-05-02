@@ -15,7 +15,7 @@ computeOverallPredictor <- function(nodePreds, nodeVars, weights, bayesian){
 	            predictedVariance = unname(predictedVariance)))
 }
 
-btopsPredict <- function(ToP, newdata, confidence.level=.95){
+btopsPredict <- function(ToP, newdata, confidence.level){
 
 	# tic("Prediction")
 	newdata2 <- base::cbind("Intercept" = 1,
