@@ -79,7 +79,7 @@ btopsPredict <- function(ToP, newdata, confidence.level){
 		rawPredictedVariances <- unlist(predictedVariances)
 	}
 
-	q <- stats::qnorm(confidence.level)
+	q <- stats::qnorm((1+confidence.level)/2)
 
 	PI <- data.frame("lwr" = rawPredictedValues - q * base::sqrt(rawPredictedVariances),
 	                 "upr" = rawPredictedValues + q * base::sqrt(rawPredictedVariances))
